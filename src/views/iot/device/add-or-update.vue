@@ -10,12 +10,6 @@
 			<el-form-item label="类型" prop="type">
 				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 温湿度传感器 3 蜂鸣器  4 红外传感器"></el-input>
 			</el-form-item>
-			<el-form-item label="租户id" prop="tenantId">
-				<el-input v-model="dataForm.tenantId" placeholder="租户id"></el-input>
-			</el-form-item>
-			<el-form-item label="管理员id" prop="adminId">
-				<el-input v-model="dataForm.adminId" placeholder="管理员id"></el-input>
-			</el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
