@@ -44,7 +44,6 @@
 			<el-table-column prop="deviceId" label="设备id" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="name" label="设备名称" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="type" label="类型" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="isSwitched" label="开关" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="status" label="状态" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="temperature" label="温度" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="humidity" label="湿度" header-align="center" align="center"></el-table-column>

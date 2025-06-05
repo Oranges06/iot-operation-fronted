@@ -10,9 +10,6 @@
 			<el-form-item label="类型" prop="type">
 				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 温湿度传感器 3 蜂鸣器  4 红外传感器"></el-input>
 			</el-form-item>
-			<el-form-item label="开关" prop="isSwitched">
-				<el-input v-model="dataForm.isSwitched" placeholder="开关 0-开 1-关"></el-input>
-			</el-form-item>
 			<el-form-item label="租户id" prop="tenantId">
 				<el-input v-model="dataForm.tenantId" placeholder="租户id"></el-input>
 			</el-form-item>
