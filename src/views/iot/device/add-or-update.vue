@@ -1,32 +1,23 @@
 <template>
-	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
-		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-			<el-form-item label="编码" prop="code">
-				<el-input v-model="dataForm.code" placeholder="编码"></el-input>
+	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" draggable>
+		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" :label-width="100">
+			<el-form-item label="设备id" prop="deviceId">
+				<el-input v-model="dataForm.deviceId" placeholder="设备id"></el-input>
 			</el-form-item>
-			<el-form-item label="名称" prop="name">
-				<el-input v-model="dataForm.name" placeholder="名称"></el-input>
+			<el-form-item label="设备名称" prop="name">
+				<el-input v-model="dataForm.name" placeholder="设备名称"></el-input>
 			</el-form-item>
-			<el-form-item label="设备类型" prop="type">
-				<ma-dict-select v-model="dataForm.type" dict-type="device_type" placeholder="设备类型" clearable></ma-dict-select>
+			<el-form-item label="类型" prop="type">
+				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 温湿度传感器 3 蜂鸣器  4 红外传感器"></el-input>
 			</el-form-item>
-			<el-form-item label="唯一标识码" prop="uid">
-				<el-input v-model="dataForm.uid" placeholder="唯一标识码"></el-input>
+			<el-form-item label="开关" prop="isSwitched">
+				<el-input v-model="dataForm.isSwitched" placeholder="开关 0-开 1-关"></el-input>
 			</el-form-item>
-			<el-form-item label="通信协议" prop="protocolType">
-				<el-select v-model="dataForm.protocolType" placeholder="通信协议" style="width: 100%">
-					<el-option label="MQTT" value="MQTT"></el-option>
-					<el-option label="TCP" value="TCP"></el-option>
-					<el-option label="Modbus" value="Modbus" disabled></el-option>
-					<el-option label="CoAP" value="CoAP" disabled></el-option>
-					<el-option label="LwM2M" value="LwM2M" disabled></el-option>
-				</el-select>
+			<el-form-item label="租户id" prop="tenantId">
+				<el-input v-model="dataForm.tenantId" placeholder="租户id"></el-input>
 			</el-form-item>
-			<el-form-item label="设备密钥" prop="secret">
-				<el-input v-model="dataForm.secret" placeholder="设备密钥"></el-input>
-			</el-form-item>
-			<el-form-item label="状态" prop="status">
-				<ma-dict-radio v-model="dataForm.status" dict-type="enable_disable"></ma-dict-radio>
+			<el-form-item label="管理员id" prop="adminId">
+				<el-input v-model="dataForm.adminId" placeholder="管理员id"></el-input>
 			</el-form-item>
 		</el-form>
 		<template #footer>
@@ -39,62 +30,55 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useIotDeviceApi, useIotDeviceSubmitApi } from '@/api/iot/device'
+import { useDeviceApi, useDeviceSubmitApi } from '@/api/iot/device'
 
 const emit = defineEmits(['refreshDataList'])
 
-const visible = ref(false)
+const visible = defineModel<boolean>('visible')
 const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
-	code: '',
+	deviceId: '',
 	name: '',
 	type: '',
-	uid: '',
-	protocolType: '',
-	secret: '',
-	status: '1'
+	isSwitched: '',
+	status: '',
+	temperature: '',
+	humidity: '',
+	tenantId: '',
+	adminId: '',
+	createTime: '',
+	updateTime: '',
+	deleted: ''
 })
 
 const init = (id?: number) => {
-	visible.value = true
-	dataForm.id = ''
-
-	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields()
-	}
-
 	if (id) {
-		getIot_device(id)
+		getDevice(id)
 	}
 }
 
-const getIot_device = (id: number) => {
-	useIotDeviceApi(id).then(res => {
+const getDevice = (id: number) => {
+	useDeviceApi(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }
 
 const dataRules = ref({
-	code: [{ required: true, message: '编码不能为空', trigger: 'blur' }],
-	name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-	type: [{ required: true, message: '设备类型不能为空', trigger: 'blur' }],
-	uid: [{ required: true, message: '唯一标识码不能为空', trigger: 'blur' }],
-	secret: [{ required: true, message: '设备密钥不能为空', trigger: 'blur' }],
-	status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
-	protocolType: [{ required: true, message: '通信协议不能为空', trigger: 'blur' }]
+	deviceId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
 const submitHandle = () => {
-	dataFormRef.value.validate((valid: boolean) => {
+	dataFormRef.value.validate(async (valid: boolean) => {
 		if (!valid) {
 			return false
 		}
 
-		useIotDeviceSubmitApi(dataForm).then(() => {
+		useDeviceSubmitApi(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,
