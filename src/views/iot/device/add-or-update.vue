@@ -8,7 +8,7 @@
 				<el-input v-model="dataForm.name" placeholder="设备名称"></el-input>
 			</el-form-item>
 			<el-form-item label="类型" prop="type">
-				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 温湿度传感器 3 蜂鸣器  4 红外传感器"></el-input>
+				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 风扇 3 蜂鸣器  4 温湿度传感器 5 人体红外传感器 6 光敏传感器"></el-input>
 			</el-form-item>
 		</el-form>
 		<template #footer>
