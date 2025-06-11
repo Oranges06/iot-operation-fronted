@@ -22,7 +22,9 @@
 	<el-card>
 		<el-space>
 			<el-space>
-				<el-button v-auth="'iot:device:save'" icon="Plus" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+				<el-button v-if="userStore.user.id === '10000'" v-auth="'iot:device:save'" icon="Plus" type="primary" @click="addOrUpdateHandle()"
+					>新增</el-button
+				>
 			</el-space>
 			<el-space>
 				<el-button v-auth="'iot:device:export'" plain icon="Download" @click="downloadHandle('/new/iot/device/export')">导出</el-button>
