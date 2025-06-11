@@ -1,16 +1,13 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" draggable>
-		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" :label-width="100">
-			<el-form-item label="设备id" prop="deviceId">
-				<el-input v-model="dataForm.deviceId" placeholder="设备id"></el-input>
-			</el-form-item>
-			<el-form-item label="设备名称" prop="name">
-				<el-input v-model="dataForm.name" placeholder="设备名称"></el-input>
-			</el-form-item>
-			<el-form-item label="类型" prop="type">
-				<el-input v-model="dataForm.type" placeholder="类型 1 灯 2 风扇 3 蜂鸣器  4 温湿度传感器 5 人体红外传感器 6 光敏传感器"></el-input>
-			</el-form-item>
-		</el-form>
+  <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" :label-width="100">
+  <el-form-item label="协议名称" prop="name">
+      <el-input v-model="dataForm.name" placeholder="协议名称"></el-input>
+  </el-form-item>
+  <el-form-item label="协议描述" prop="description">
+      <el-input v-model="dataForm.description" placeholder="协议描述"></el-input>
+  </el-form-item>
+  </el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
@@ -21,7 +18,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDeviceApi, useDeviceSubmitApi } from '@/api/iot/device'
+import { useProtocolApi, useProtocolSubmitApi } from '@/api/platform/protocol'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -30,37 +27,27 @@ const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
-	deviceId: '',
 	name: '',
-	type: '',
-	isSwitched: '',
-	status: '',
-	temperature: '',
-	humidity: '',
-	tenantId: '',
-	adminId: '',
+	description: '',
 	createTime: '',
 	updateTime: '',
-	deleted: ''
-})
+	deleted: ''})
 
 const init = (id?: number) => {
 	if (id) {
-		getDevice(id)
+		getProtocol(id)
 	}
 }
 
-const getDevice = (id: number) => {
-	useDeviceApi(id).then(res => {
+const getProtocol = (id: number) => {
+	useProtocolApi(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }
 
 const dataRules = ref({
-	deviceId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
-})
+	description: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]})
 
 // 表单提交
 const submitHandle = () => {
@@ -69,7 +56,8 @@ const submitHandle = () => {
 			return false
 		}
 
-		useDeviceSubmitApi(dataForm).then(() => {
+
+		useProtocolSubmitApi(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,
